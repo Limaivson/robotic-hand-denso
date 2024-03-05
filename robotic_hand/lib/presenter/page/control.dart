@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:robotic_hand/external/send_commands_to_robotic_hand.dart';
 
 class Control extends StatelessWidget {
   const Control({super.key});
@@ -68,7 +69,8 @@ class _ControlPageState extends State<ControlPage> {
                   onChanged: (value) {
                     setState(() {
                       porcentagem = value;
-                      print('Porcentagem: $porcentagem');
+                      String porcentagemSend = porcentagem.toString();
+                      sendCommandToRoboticHand(porcentagemSend);
                     });
                   },
                 ),
