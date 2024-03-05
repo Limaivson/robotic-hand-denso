@@ -27,10 +27,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - lib/assets/garrafa.png
-    - lib/assets/telefone.png
-    - lib/assets/pote.png
-    - lib/assets/medicamento.png
+    - assets/images/garrafa.png
+    - assets/images/telefone.png
+    - assets/images/pote.png
+    - assets/images/medicamento.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
