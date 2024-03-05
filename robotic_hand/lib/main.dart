@@ -31,10 +31,10 @@ class MyHomePage extends StatelessWidget {
               child: GridView.count(
                 crossAxisCount: 2,
                 children: [
-                  _buildButtonWithImage(context, 'Garrafa', 'garrafa.png'),
-                  _buildButtonWithImage(context, 'Telefone', 'telefone.png'),
-                  _buildButtonWithImage(context, 'Pote', 'pote.png'),
-                  _buildButtonWithImage(context, 'Medicamento', 'medicamento.png'),
+                  _buildButtonWithImage(context, 'Garrafa', 'assets/images/garrafa.png'),
+                  _buildButtonWithImage(context, 'Telefone', 'assets/images/telefone.png'),
+                  _buildButtonWithImage(context, 'Pote', 'assets/images/pote.png'),
+                  _buildButtonWithImage(context, 'Medicamento', 'assets/images/medicamento.png'),
                 ],
               ),
             ),
