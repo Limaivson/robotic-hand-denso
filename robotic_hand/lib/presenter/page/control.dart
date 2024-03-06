@@ -62,11 +62,11 @@ class _ControlPageState extends State<ControlPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Porcentagem: '),
+                const Text('Controle de abertura da mão: '),
                 Slider(
                   value: porcentagem,
                   min: 0,
-                  max: 100,
+                  max: 180,
                   onChanged: (value) {
                     setState(() {
                       porcentagem = value;
@@ -75,12 +75,18 @@ class _ControlPageState extends State<ControlPage> {
                     });
                   },
                 ),
+                Text('${porcentagem.toInt()}°',
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                print('Finalizando');
+                finalizeMoveDenso();
               },
               child: const Text('Finalizar'),
             ),
