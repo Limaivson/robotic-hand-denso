@@ -50,3 +50,19 @@ void sendCommandMoveToDenso() async {
     debugPrint('Erro: $e');
   }
 }
+
+void finalizeMoveDenso() async {
+  var uri = Uri.parse('$url/finalize-denso/');
+
+  try {
+    var response = await http.post(uri);
+    if (response.statusCode == 200) {
+      debugPrint('Comando enviado com sucesso');
+    } else {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      debugPrint('Error: ${responseData['message']}');
+    }
+  } catch (e) {
+    debugPrint('Erro: $e');
+  }
+}
