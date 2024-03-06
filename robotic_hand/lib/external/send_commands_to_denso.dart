@@ -1,8 +1,6 @@
 // ignore: depend_on_referenced_packages
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 String url = 'http://127.0.0.1:8000/';
