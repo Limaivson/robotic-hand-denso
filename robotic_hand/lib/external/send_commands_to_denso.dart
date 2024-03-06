@@ -19,7 +19,7 @@ void sendCommandToDenso(int move) async {
   } else {
     positions = '323, 355, 645, 555, 973';
   }
-  debugPrint(positions);
+  
   try {
     var response = await http.post(
       uri, 
