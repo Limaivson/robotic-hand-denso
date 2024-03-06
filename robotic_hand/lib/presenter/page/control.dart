@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:robotic_hand/external/send_commands_to_denso.dart';
+import 'package:robotic_hand/external/send_commands_to_robotic_hand.dart';
 
 class Control extends StatelessWidget {
   const Control({super.key});
@@ -52,7 +54,7 @@ class _ControlPageState extends State<ControlPage> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                print('Movendo Robô');
+                sendCommandMoveToDenso();
               },
               child: const Text('Mover Robô'),
             ),
@@ -60,24 +62,31 @@ class _ControlPageState extends State<ControlPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Porcentagem: '),
+                const Text('Controle de abertura da mão: '),
                 Slider(
                   value: porcentagem,
                   min: 0,
-                  max: 100,
+                  max: 180,
                   onChanged: (value) {
                     setState(() {
                       porcentagem = value;
-                      print('Porcentagem: $porcentagem');
+                      String porcentagemSend = porcentagem.toString();
+                      sendCommandToRoboticHand(porcentagemSend);
                     });
                   },
+                ),
+                Text('${porcentagem.toInt()}°',
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                print('Finalizando');
+                finalizeMoveDenso();
               },
               child: const Text('Finalizar'),
             ),
@@ -88,13 +97,33 @@ class _ControlPageState extends State<ControlPage> {
   }
 
   Widget _buildButtonWithImage(BuildContext context, String buttonText, String imagePath) {
+    Color buttonColor;
+    int move;
+
+    if(buttonText == 'Garrafa'){
+      move = 0;
+      buttonColor = const Color(0xFF65b3fc);
+    } else if(buttonText == 'Telefone'){
+      move = 1;
+      buttonColor = const Color(0xFF838e98);
+    } else if(buttonText == 'Pote'){
+      move = 2;
+      buttonColor = const Color(0xFF9ae094);
+    } else {
+      move = 3;
+      buttonColor = const Color(0xFFbbbdbe);
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
           onPressed: () {
-            print('Selecionado: $buttonText');
+            sendCommandToDenso(move);
           },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: buttonColor,
+          ),
           child: Text(buttonText),
         ),
         const SizedBox(height: 10.0),
