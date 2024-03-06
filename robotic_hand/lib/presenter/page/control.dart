@@ -24,6 +24,13 @@ class ControlPage extends StatefulWidget {
 class _ControlPageState extends State<ControlPage> {
   double porcentagem = 0.0; 
 
+  Map<String, bool> buttonStates = {
+    'Garrafa': true,
+    'Telefone': true,
+    'Pote': true,
+    'Medicamento': true,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,9 +125,12 @@ class _ControlPageState extends State<ControlPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () {
+          onPressed: buttonStates[buttonText]!? () {
             sendCommandToDenso(move);
-          },
+            setState(() {
+              buttonStates[buttonText] = false;
+            });
+          } : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: buttonColor,
           ),
