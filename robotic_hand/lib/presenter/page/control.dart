@@ -29,6 +29,8 @@ class _ControlPageState extends State<ControlPage> {
     'Telefone': true,
     'Pote': true,
     'Medicamento': true,
+    'Mover Robô': false,
+    'Finalizar': false,
   };
 
   @override
@@ -60,9 +62,13 @@ class _ControlPageState extends State<ControlPage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: buttonStates['Mover Robô']!?() {
                 sendCommandMoveToDenso();
-              },
+                setState(() {
+                  buttonStates['Mover Robô'] = false;
+                  buttonStates['Finalizar'] = true;
+                });
+              } : null,
               child: const Text('Mover Robô'),
             ),
             const SizedBox(height: 20.0),
@@ -92,9 +98,12 @@ class _ControlPageState extends State<ControlPage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: buttonStates['Finalizar']!?() {
                 finalizeMoveDenso();
-              },
+                setState(() {
+                  buttonStates['Finalizar'] = false;
+                });
+              } : null,
               child: const Text('Finalizar'),
             ),
           ],
@@ -129,6 +138,7 @@ class _ControlPageState extends State<ControlPage> {
             sendCommandToDenso(move);
             setState(() {
               buttonStates[buttonText] = false;
+              buttonStates['Mover Robô'] = true;
             });
           } : null,
           style: ElevatedButton.styleFrom(
