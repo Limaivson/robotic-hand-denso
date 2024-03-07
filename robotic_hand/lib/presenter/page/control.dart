@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robotic_hand/external/send_commands_to_denso.dart';
 import 'package:robotic_hand/external/send_commands_to_robotic_hand.dart';
+import 'package:robotic_hand/presenter/store/robotic_store.dart';
 
 class Control extends StatelessWidget {
   const Control({super.key});
@@ -62,8 +63,9 @@ class _ControlPageState extends State<ControlPage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: buttonStates['Mover Robô']!?() {
-                sendCommandMoveToDenso();
+              onPressed: buttonStates['Mover Robô']!?() async {
+                String msg = await sendCommandMoveToDenso();
+                popup(msg);
                 setState(() {
                   buttonStates['Mover Robô'] = false;
                   buttonStates['Finalizar'] = true;
@@ -98,8 +100,9 @@ class _ControlPageState extends State<ControlPage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: buttonStates['Finalizar']!?() {
-                finalizeMoveDenso();
+              onPressed: buttonStates['Finalizar']!?() async {
+                String msg = await finalizeMoveDenso();
+                popup(msg);
                 setState(() {
                   buttonStates['Finalizar'] = false;
                 });
@@ -134,12 +137,17 @@ class _ControlPageState extends State<ControlPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: buttonStates[buttonText]!? () {
-            sendCommandToDenso(move);
+          onPressed: buttonStates[buttonText]!? () async {
+            String msg = await sendCommandToDenso(move);
+            popup(msg);      
+            if(msg == 'Erro ao enviar as posições para o Denso'){
+
+            } else {
             setState(() {
               buttonStates[buttonText] = false;
               buttonStates['Mover Robô'] = true;
             });
+            }
           } : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: buttonColor,
@@ -155,4 +163,24 @@ class _ControlPageState extends State<ControlPage> {
       ],
     );
   }
+
+  void popup(String titulo) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Text(titulo),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Fechar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }
