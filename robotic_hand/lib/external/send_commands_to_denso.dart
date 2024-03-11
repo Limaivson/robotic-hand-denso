@@ -1,11 +1,10 @@
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/material.dart';
 
 String url = 'http://127.0.0.1:8000/';
 
-void sendCommandToDenso(int move) async {
+Future<String> sendCommandToDenso(int move) async {
   var uri = Uri.parse('$url/control-denso/');
 
   String positions;
@@ -25,44 +24,44 @@ void sendCommandToDenso(int move) async {
       uri, 
       body: {'positions': positions}
     );
+    Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 200) {
-      debugPrint('Comando enviado com sucesso');
+      return responseData['message'];
     } else {
-      debugPrint('Falha ao enviar as posições para o Denso. Código de erro: ${response.statusCode}');
+      return responseData['message'];
     }
   } catch (e) {
-    debugPrint('Erro: $e');
+    return 'Erro ao enviar as posições para o Denso';
   }
 }  
 
-void sendCommandMoveToDenso() async {
+ Future<String> sendCommandMoveToDenso() async {
   var uri = Uri.parse('$url/move-denso/');
-
   try {
     var response = await http.post(uri);
+    Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 200) {
-      debugPrint('Comando enviado com sucesso');
+      return responseData['message'];
     } else {
-      Map<String, dynamic> responseData = json.decode(response.body);
-      debugPrint('Error: ${responseData['message']}');
+      return responseData['message'];
     }
   } catch (e) {
-    debugPrint('Erro: $e');
+    return 'Erro ao enviar o comando para o Denso';
   }
 }
 
-void finalizeMoveDenso() async {
+Future<String> finalizeMoveDenso() async {
   var uri = Uri.parse('$url/finalize-denso/');
-
   try {
     var response = await http.post(uri);
+    Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 200) {
-      debugPrint('Comando enviado com sucesso');
+      return responseData['message'];
     } else {
-      Map<String, dynamic> responseData = json.decode(response.body);
-      debugPrint('Error: ${responseData['message']}');
+      return responseData['message'];
     }
   } catch (e) {
-    debugPrint('Erro: $e');
+    return 'Erro ao enviar o comando para o Denso';
   }
 }
+

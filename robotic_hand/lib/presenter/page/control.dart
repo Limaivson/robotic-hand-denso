@@ -24,6 +24,15 @@ class ControlPage extends StatefulWidget {
 class _ControlPageState extends State<ControlPage> {
   double porcentagem = 0.0; 
 
+  Map<String, bool> buttonStates = {
+    'Garrafa': true,
+    'Telefone': true,
+    'Pote': true,
+    'Medicamento': true,
+    'Mover Robô': false,
+    'Finalizar': false,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +62,14 @@ class _ControlPageState extends State<ControlPage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                sendCommandMoveToDenso();
-              },
+              onPressed: buttonStates['Mover Robô']!?() async {
+                String msg = await sendCommandMoveToDenso();
+                popup(msg);
+                setState(() {
+                  buttonStates['Mover Robô'] = false;
+                  buttonStates['Finalizar'] = true;
+                });
+              } : null,
               child: const Text('Mover Robô'),
             ),
             const SizedBox(height: 20.0),
@@ -85,9 +99,13 @@ class _ControlPageState extends State<ControlPage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                finalizeMoveDenso();
-              },
+              onPressed: buttonStates['Finalizar']!?() async {
+                String msg = await finalizeMoveDenso();
+                popup(msg);
+                setState(() {
+                  buttonStates['Finalizar'] = false;
+                });
+              } : null,
               child: const Text('Finalizar'),
             ),
           ],
@@ -99,7 +117,6 @@ class _ControlPageState extends State<ControlPage> {
   Widget _buildButtonWithImage(BuildContext context, String buttonText, String imagePath) {
     Color buttonColor;
     int move;
-
     if(buttonText == 'Garrafa'){
       move = 0;
       buttonColor = const Color(0xFF65b3fc);
@@ -118,9 +135,18 @@ class _ControlPageState extends State<ControlPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () {
-            sendCommandToDenso(move);
-          },
+          onPressed: buttonStates[buttonText]!? () async {
+            String msg = await sendCommandToDenso(move);
+            popup(msg);      
+            if(msg == 'Erro ao enviar as posições para o Denso'){
+
+            } else {
+            setState(() {
+              buttonStates[buttonText] = false;
+              buttonStates['Mover Robô'] = true;
+            });
+            }
+          } : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: buttonColor,
           ),
@@ -133,6 +159,25 @@ class _ControlPageState extends State<ControlPage> {
           width: 100.0,
         ),
       ],
+    );
+  }
+
+  void popup(String titulo) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Text(titulo),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Fechar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
