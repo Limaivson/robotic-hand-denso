@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robotic_hand/external/send_commands_to_denso.dart';
 import 'package:robotic_hand/external/send_commands_to_robotic_hand.dart';
-import 'package:robotic_hand/presenter/store/robotic_store.dart';
 
 class Control extends StatelessWidget {
   const Control({super.key});
@@ -118,7 +117,6 @@ class _ControlPageState extends State<ControlPage> {
   Widget _buildButtonWithImage(BuildContext context, String buttonText, String imagePath) {
     Color buttonColor;
     int move;
-
     if(buttonText == 'Garrafa'){
       move = 0;
       buttonColor = const Color(0xFF65b3fc);
@@ -176,11 +174,10 @@ class _ControlPageState extends State<ControlPage> {
               Navigator.of(context).pop();
             },
             child: const Text('Fechar'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
