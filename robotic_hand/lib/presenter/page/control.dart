@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robotic_hand/external/send_commands_to_denso.dart';
 import 'package:robotic_hand/external/send_commands_to_robotic_hand.dart';
+import 'package:robotic_hand/external/server_status.dart';
 
 class Control extends StatelessWidget {
   const Control({super.key});
@@ -23,6 +24,7 @@ class ControlPage extends StatefulWidget {
 
 class _ControlPageState extends State<ControlPage> {
   double porcentagem = 0.0; 
+  bool isServerActive = false;
 
   Map<String, bool> buttonStates = {
     'Garrafa': true,
@@ -107,6 +109,25 @@ class _ControlPageState extends State<ControlPage> {
                 });
               } : null,
               child: const Text('Finalizar'),
+            ),
+            const SizedBox(height: 20.0),
+            Text('Status do servidor: ${isServerActive ? 'Ativo' : 'Inativo'}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+              color: isServerActive ? Colors.green : Colors.red,
+            ),
+            ),
+            const SizedBox(height: 20.0),
+
+            ElevatedButton(
+              onPressed: () async {
+                bool serverIsActive = await serverStatus();
+                setState(() {
+                  isServerActive = serverIsActive;
+                });
+              },
+              child: const Text('Atualizar'),
             ),
           ],
         ),
